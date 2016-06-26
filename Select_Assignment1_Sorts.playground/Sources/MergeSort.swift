@@ -2,9 +2,13 @@ import Foundation
 
 private func mergeRemainingSubListElements(inout mergedList: [Int], inout subList: [Int]) {
     while subList.count > 0 {
-        mergedList.append(subList[0])
-        subList.removeAtIndex(0)
+        appendToMergeList(&mergedList, subList: &subList)
     }
+}
+
+private func appendToMergeList(inout mergedList: [Int], inout subList: [Int]) {
+    mergedList.append(subList.first!)
+    subList.removeFirst()
 }
 
 private func mergeSubLists(firstList: [Int], secondList: [Int]) -> [Int] {
@@ -12,13 +16,11 @@ private func mergeSubLists(firstList: [Int], secondList: [Int]) -> [Int] {
     var tempSecondList = secondList
     var mergedList = [Int]()
     while tempFirstList.count > 0 && tempSecondList.count > 0 {
-        if tempFirstList[0] > tempSecondList[0] {
-            mergedList.append(tempSecondList[0])
-            tempSecondList.removeAtIndex(0)
+        if tempFirstList.first > tempSecondList.first {
+            appendToMergeList(&mergedList, subList: &tempSecondList)
         }
         else {
-            mergedList.append(tempFirstList[0])
-            tempFirstList.removeAtIndex(0)
+            appendToMergeList(&mergedList, subList: &tempFirstList)
         }
     }
     mergeRemainingSubListElements(&mergedList, subList: &tempFirstList)
@@ -28,24 +30,24 @@ private func mergeSubLists(firstList: [Int], secondList: [Int]) -> [Int] {
 }
 
 public func mergeSort(list: [Int]) -> [Int] {
+    //make sure the list is greater than 1, if not, we don't need to sort
     guard list.count > 1 else {
         return list
     }
     
     var sortedList = list
-    
     let lastIndex = sortedList.count - 1
+    let middleElementIndex = sortedList.count / 2
     
-    let numberOfFirstSubListElements = sortedList.count / 2
+    var firstSubList = Array(sortedList[0..<middleElementIndex])
+    var secondSubList = Array(sortedList[middleElementIndex...lastIndex])
     
-    var secondSubList = Array(sortedList[0...numberOfFirstSubListElements - 1])
-    if secondSubList.count > 1 {
-        secondSubList = mergeSort(secondSubList)
-    }
-    
-    var firstSubList = Array(sortedList[numberOfFirstSubListElements...lastIndex])
     if firstSubList.count > 1 {
         firstSubList = mergeSort(firstSubList)
+    }
+    
+    if secondSubList.count > 1 {
+        secondSubList = mergeSort(secondSubList)
     }
     
     return mergeSubLists(firstSubList, secondList: secondSubList)

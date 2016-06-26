@@ -8,7 +8,7 @@ public func selectSort(list: [Int]) -> [Int] {
     
     var sortedList = list
     let lastIndex = sortedList.count - 1
-    for sortingIndex in 0...lastIndex - 1  {
+    for sortingIndex in 0..<lastIndex  {
         var minIndex = sortingIndex
         for index in sortingIndex+1...lastIndex {
             if sortedList[minIndex] > sortedList[index] {

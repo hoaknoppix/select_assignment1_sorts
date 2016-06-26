@@ -6,5 +6,4 @@ public class Utils {
         firstVariable = lastVariable
         lastVariable = temp
     }
-    
 }
